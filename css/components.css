@@ -1,0 +1,151 @@
+/* Botones */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+  min-height: 48px; padding: 0 var(--space-5);
+  border: 2px solid transparent; border-radius: var(--radius-sm);
+  font-family: var(--font-display); font-size: 1.125rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none;
+  cursor: pointer;
+  transition: background var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast), transform 160ms var(--ease-out);
+}
+.btn:active { transform: scale(0.97); }
+.btn--primary { position: relative; overflow: hidden; background: var(--color-primary); color: var(--color-on-primary); }
+.btn--ghost { border-color: var(--color-fg); color: var(--color-fg); background: transparent; }
+/* Destello que cruza el botón principal (nace fuera del botón y queda recortado por overflow) */
+.btn--primary::after {
+  content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 35%; pointer-events: none;
+  background: linear-gradient(100deg, transparent, var(--color-glass-highlight), transparent);
+  transform: translateX(-140%) skewX(-18deg);
+}
+/* Los efectos de hover solo con mouse: en pantallas táctiles un toque los dejaba "pegados" */
+@media (hover: hover) and (pointer: fine) {
+  .btn--primary:hover { background: var(--color-primary-hover); }
+  .btn--primary:hover::after { transform: translateX(380%) skewX(-18deg); transition: transform 500ms var(--ease-out); }
+  .btn--ghost:hover { background: var(--color-fg); color: var(--color-bg); }
+}
+
+/* Tarjeta con esquina cortada */
+.card {
+  position: relative;
+  padding: var(--space-5);
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%);
+  transition: border-color var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .card:hover { border-color: var(--color-primary); transform: translateY(-4px); }
+}
+
+/* Header y navegación */
+.site-header {
+  position: fixed; inset: 0 0 auto 0; z-index: 50; height: var(--header-h);
+  background: var(--color-overlay);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--color-border);
+}
+.header-inner { display: flex; align-items: center; justify-content: space-between; height: 100%; }
+.brand { display: inline-flex; align-items: center; gap: var(--space-3); min-height: 48px; text-decoration: none; }
+.brand img { width: 52px; height: 52px; }
+.brand-text { display: flex; flex-direction: column; line-height: 1; }
+.brand-name { font-family: var(--font-display); font-size: 1.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.brand-sub {
+  margin-top: 3px; color: var(--color-fg-muted);
+  font-family: var(--font-display); font-size: 0.75rem; font-weight: 600;
+  letter-spacing: 0.16em; text-transform: uppercase;
+}
+
+.nav-toggle {
+  position: relative; display: grid; place-items: center;
+  width: 48px; height: 48px; padding: 0;
+  background: none; border: 0; cursor: pointer;
+}
+.nav-toggle-bar, .nav-toggle-bar::before, .nav-toggle-bar::after {
+  display: block; width: 24px; height: 2px; background: currentColor;
+  transition: transform var(--dur-base) var(--ease-out), background var(--dur-base);
+}
+.nav-toggle-bar { position: relative; }
+.nav-toggle-bar::before, .nav-toggle-bar::after { content: ""; position: absolute; left: 0; }
+.nav-toggle-bar::before { transform: translateY(-7px); }
+.nav-toggle-bar::after { transform: translateY(7px); }
+.site-header.is-open .nav-toggle-bar { background: transparent; }
+.site-header.is-open .nav-toggle-bar::before { transform: rotate(45deg); }
+.site-header.is-open .nav-toggle-bar::after { transform: rotate(-45deg); }
+
+/* Menú móvil: se despliega con un recorte desde arriba y los enlaces entran escalonados (se abre pocas veces: 220 ms) */
+.site-nav {
+  display: none; position: absolute; top: 100%; left: 0; right: 0;
+  padding: var(--space-3) var(--space-4) var(--space-5);
+  background: var(--color-surface); border-bottom: 1px solid var(--color-border);
+  clip-path: inset(0 0 100% 0); opacity: 0;
+  transition: clip-path 220ms var(--ease-out), opacity 160ms var(--ease-out), display 220ms allow-discrete;
+}
+.site-header.is-open .site-nav { display: block; clip-path: inset(0); opacity: 1; }
+@starting-style {
+  .site-header.is-open .site-nav { clip-path: inset(0 0 100% 0); opacity: 0; }
+}
+.site-header.is-open .site-nav li { animation: nav-link-in 220ms var(--ease-out) backwards; }
+.site-header.is-open .site-nav li:nth-child(1) { animation-delay: 40ms; }
+.site-header.is-open .site-nav li:nth-child(2) { animation-delay: 75ms; }
+.site-header.is-open .site-nav li:nth-child(3) { animation-delay: 110ms; }
+.site-header.is-open .site-nav li:nth-child(4) { animation-delay: 145ms; }
+.site-header.is-open .site-nav li:nth-child(5) { animation-delay: 180ms; }
+.site-header.is-open .site-nav li:nth-child(6) { animation-delay: 215ms; }
+.site-header.is-open .site-nav li:nth-child(7) { animation-delay: 250ms; }
+@keyframes nav-link-in { from { opacity: 0; transform: translate3d(0, -8px, 0); } }
+.site-nav a {
+  display: flex; align-items: center; min-height: 48px;
+  font-family: var(--font-display); font-size: 1.375rem; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none;
+  transition: color var(--dur-fast);
+}
+.site-nav a[aria-current="true"] { color: var(--color-primary); }
+@media (hover: hover) and (pointer: fine) {
+  .site-nav a:hover { color: var(--color-primary); }
+}
+.nav-indicator { display: none; }
+
+@media (min-width: 900px) {
+  .nav-toggle { display: none; }
+  .site-nav { display: block; position: static; padding: 0; background: none; border: 0; clip-path: none; opacity: 1; transition: none; }
+  .site-header.is-open .site-nav li { animation: none; }
+  .site-nav ul { position: relative; display: flex; gap: var(--space-1); }
+  .site-nav a { padding: 0 var(--space-3); font-size: 1.125rem; }
+  /* Barra que se desliza bajo el enlace activo: solo transform y opacity */
+  .nav-indicator {
+    display: block; position: absolute; left: 0; bottom: 6px; width: 1px; height: 2px; pointer-events: none;
+    background: var(--color-primary); transform-origin: left center;
+    transform: translate3d(var(--ix, 0px), 0, 0) scaleX(var(--iw, 0)); opacity: var(--io, 0);
+    transition: opacity 200ms var(--ease-out);
+  }
+  .nav-indicator.is-ready { transition: transform 250ms var(--ease-in-out), opacity 200ms var(--ease-out); }
+}
+
+/* Íconos SVG (trazo) */
+.icon { width: 1.75rem; height: 1.75rem; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.icon--sm { width: 1.25rem; height: 1.25rem; }
+
+/* Botón flotante de WhatsApp */
+.wa-fab {
+  position: fixed; z-index: 60;
+  right: max(var(--space-4), env(safe-area-inset-right));
+  bottom: max(var(--space-4), env(safe-area-inset-bottom));
+  display: grid; place-items: center; width: 60px; height: 60px; border-radius: 50%;
+  background: var(--color-whatsapp); color: var(--color-on-whatsapp);
+  box-shadow: 0 8px 24px var(--color-shadow);
+  transition: transform var(--dur-base) var(--ease-apple);
+  animation: fab-in var(--dur-xslow) var(--ease-apple) 1s backwards;
+}
+@media (hover: hover) and (pointer: fine) {
+  .wa-fab:hover { transform: scale(1.08); }
+}
+.wa-fab:active { transform: scale(0.96); }
+.wa-fab .icon { width: 32px; height: 32px; }
+@keyframes fab-in {
+  from { opacity: 0; transform: translate3d(0, 24px, 0) scale(0.8); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wa-fab { animation: none; }
+  .site-header.is-open .site-nav li { animation: none; }
+}

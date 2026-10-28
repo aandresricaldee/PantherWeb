@@ -1,0 +1,76 @@
+/* Única fuente de verdad de diseño. Los colores se definen SOLO acá.
+   Para cambiar un color del sitio, editar el valor de su variable. */
+:root {
+  /* Color — base */
+  --color-bg: #0B0B0D;
+  --color-surface: #16171B;
+  --color-card: #1F2026;
+  --color-border: #2E3038;
+
+  /* Color — texto */
+  --color-fg: #F8FAFC;
+  --color-fg-muted: #B6BCC8;
+
+  /* Color — acento */
+  --color-primary: #6FB899;
+  --color-primary-hover: #8AC9AE;
+  --color-on-primary: #0B0B0D;
+  --color-primary-soft: rgba(111, 184, 153, 0.14);
+
+  /* Color — utilitarios */
+  --color-overlay: rgba(11, 11, 13, 0.88);
+  --color-focus: #F8FAFC;
+  --color-shadow: rgba(0, 0, 0, 0.45);
+
+  /* Color — velos sobre la foto del hero (de más a menos opaco) */
+  --color-scrim-strong: rgba(11, 11, 13, 0.94);
+  --color-scrim-heavy: rgba(11, 11, 13, 0.84);
+  --color-scrim-mid: rgba(11, 11, 13, 0.72);
+  --color-scrim-soft: rgba(11, 11, 13, 0.5);
+
+  /* Color — vidrio (tarjetas del carrusel) */
+  --color-glass: rgba(255, 255, 255, 0.07);
+  --color-glass-border: rgba(255, 255, 255, 0.16);
+  --color-glass-highlight: rgba(255, 255, 255, 0.22);
+
+  /* Color — efectos cinematográficos del hero */
+  --color-spot: rgba(255, 255, 255, 0.17);
+  --color-beam: rgba(255, 255, 255, 0.13);
+  --color-particle: rgba(255, 255, 255, 0.75);
+
+  /* Color — WhatsApp (verde de marca) */
+  --color-whatsapp: #25D366;
+  --color-on-whatsapp: #FFFFFF;
+
+  /* Tipografía */
+  --font-display: "Barlow Condensed", "Arial Narrow", Impact, sans-serif;
+  --font-body: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Espaciado (rem) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+
+  /* Forma */
+  --radius-sm: 4px;
+  --cut: 16px;
+
+  /* Layout */
+  --container: 1200px;
+  --header-h: 80px;
+
+  /* Movimiento */
+  --dur-fast: 150ms;
+  --dur-base: 300ms;
+  --dur-slow: 450ms;
+  --dur-xslow: 800ms;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);        /* ease-out fuerte para UI: entradas, salidas y respuestas */
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);    /* ease-in-out fuerte para movimiento que ocurre en pantalla */
+  --ease-apple: cubic-bezier(0.16, 1, 0.3, 1);       /* easeOutExpo (easings.net): solo para revelados largos de marketing */
+}

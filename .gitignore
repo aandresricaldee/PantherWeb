@@ -1,0 +1,8 @@
+node_modules/
+.DS_Store
+
+# Paquetes generados para publicar (se regeneran, no se versionan)
+*.zip
+
+# Carpeta que crea la CLI de Vercel al vincular el proyecto
+.vercel/

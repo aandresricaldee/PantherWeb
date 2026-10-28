@@ -1,0 +1,11 @@
+{
+  "name": "panther-web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test \"tests/**/*.test.mjs\"",
+    "check:colors": "node scripts/check-colors.mjs",
+    "assets": "python scripts/make-assets.py",
+    "serve": "node scripts/serve.mjs"
+  }
+}

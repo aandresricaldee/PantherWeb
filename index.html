@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Panther Club de Entrenamiento</title>
+  <meta name="description" content="Panther Club de Entrenamiento: sala de musculación completa con rutinas personalizadas. Conocé nuestros servicios, horarios, planes y entrenadores.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Panther Club de Entrenamiento">
+  <meta property="og:description" content="Entrená sin límites. Musculación, horarios, planes y entrenadores.">
+  <link rel="icon" type="image/png" href="assets/img/favicon-64.png">
+  <link rel="preload" href="assets/fonts/barlow-condensed-700.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/barlow-condensed-600.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/barlow-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/sections.css">
+  <link rel="stylesheet" href="css/fx.css">
+  <script>
+    // Clase .js; intro en cada carga, salvo con "reducir movimiento" (misma regla que shouldPlayIntro en js/fx/intro.js);
+    // y una red de seguridad: pase lo que pase, a los 3,5 s el hero arranca.
+    (function () {
+      var root = document.documentElement;
+      root.classList.add('js');
+      try {
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches) root.classList.add('intro-pending');
+      } catch (e) {}
+      setTimeout(function () { root.classList.add('is-ready'); }, 3500);
+    })();
+  </script>
+</head>
+<body>
+  <!-- Intro: el escudo aparece con un destello y las cortinas se abren sobre el hero. Se muestra en cada carga (si <html> tiene .intro-pending) -->
+  <div class="intro" aria-hidden="true">
+    <div class="intro-curtain intro-curtain--top"></div>
+    <div class="intro-curtain intro-curtain--bottom"></div>
+    <div class="intro-stage">
+      <div class="intro-shield-wrap">
+        <img class="intro-shield" src="assets/img/shield-512.webp" width="512" height="512" alt="">
+        <span class="intro-sweep"></span>
+      </div>
+      <span class="intro-name">Panther Club</span>
+    </div>
+  </div>
+
+  <!-- Íconos (sprite). Uso: <svg class="icon" aria-hidden="true"><use href="#i-nombre"></use></svg> -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11z"/><path d="M12 7.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 18 0 9 9 0 1 0-18 0z"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><path d="M5 5h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M3 7l9 6 9-6"/></symbol>
+    <symbol id="i-instagram" viewBox="0 0 24 24"><path d="M8 3h8a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8a5 5 0 0 1 5-5z"/><path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/><path d="M17.5 6.5h.01"/></symbol>
+    <symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M3 21l1.6-4.7A9 9 0 1 1 8 19.5L3 21z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1.2-1.4-2-1-.9.7a4 4 0 0 1-1.6-1.6l.7-.9-1-2L9 9.5z"/></symbol>
+  </svg>
+
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#inicio" aria-label="Panther Club de Entrenamiento, ir al inicio">
+        <img src="assets/img/shield-96.webp" srcset="assets/img/shield-96.webp 1x, assets/img/shield-192.webp 2x" width="52" height="52" alt="">
+        <span class="brand-text">
+          <span class="brand-name">Panther</span>
+          <span class="brand-sub">Club de Entrenamiento</span>
+        </span>
+      </a>
+      <button id="nav-toggle" class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Abrir menú">
+        <span class="nav-toggle-bar"></span>
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="Principal">
+        <ul>
+          <li><a href="#nosotros">Nosotros</a></li>
+          <li><a href="#disciplinas">Disciplinas</a></li>
+          <li><a href="#horarios">Horarios</a></li>
+          <li><a href="#planes">Planes</a></li>
+          <li><a href="#entrenadores">Entrenadores</a></li>
+          <li><a href="#ubicacion">Ubicación</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="scroll-progress" aria-hidden="true"></div>
+  </header>
+
+  <main id="contenido">
+    <section id="inicio" class="hero" aria-labelledby="hero-title">
+      <div class="hero-bg" aria-hidden="true">
+        <img class="hero-bg-img"
+             src="assets/img/fondo-1920.webp"
+             srcset="assets/img/fondo-1024.webp 1024w, assets/img/fondo-1920.webp 1920w"
+             sizes="100vw" width="1920" height="1072" alt="" fetchpriority="high">
+      </div>
+      <!-- Capas cinematográficas (decorativas): haces de luz, polvo, foco de luz y grano de película -->
+      <div class="hero-fx" aria-hidden="true">
+        <div class="hero-beams"></div>
+        <canvas class="hero-particles"></canvas>
+        <div class="hero-spot"></div>
+        <div class="hero-grain"></div>
+      </div>
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow">Panther Club de Entrenamiento</p>
+          <h1 id="hero-title" class="hero-title" data-kinetic>
+            <span class="hero-line">Sacá la <em>pantera</em></span>
+            <span class="hero-line">que llevás dentro.</span>
+          </h1>
+          <p class="hero-lead">Entrená con método, en un club donde cada serie te exige un poco más. Sala de musculación completa y entrenadores a tu lado.</p>
+          <div class="hero-actions">
+            <a class="btn btn--primary" href="#planes">Ver planes</a>
+            <a class="btn btn--ghost" href="#horarios">Ver horarios</a>
+          </div>
+          <!-- Estado en vivo según los horarios de js/content.js (js/status.js) -->
+          <p class="status" data-status><span class="status-dot" aria-hidden="true"></span><span class="status-text"></span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cinta de texto gigante (decorativa) -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <div class="marquee-set">
+          <span>Fuerza</span><i></i><span class="is-solid">Disciplina</span><i></i><span>Constancia</span><i></i><span class="is-accent">Panther Club</span><i></i><span>Resistencia</span><i></i>
+        </div>
+      </div>
+      <div class="ecg"><div class="ecg-line"></div></div>
+    </div>
+
+    <section id="nosotros" class="section section--alt" aria-labelledby="nosotros-title">
+      <div class="container about-grid">
+        <div class="about-text reveal">
+          <p class="eyebrow">Sobre nosotros</p>
+          <h2 id="nosotros-title" class="section-title" data-kinetic>Un club para entrenar en serio</h2>
+          <p>En Panther Club creemos que entrenar bien cambia todo lo demás. Armamos un espacio exigente pero cercano, donde cada socio tiene seguimiento y una rutina a su medida.</p>
+          <p>Desde quien pisa un gimnasio por primera vez hasta quien se prepara para competir: acá hay lugar, equipo y comunidad para vos.</p>
+        </div>
+        <div class="stats reveal">
+          <div class="stat"><p class="stat-value">+8</p><p class="stat-label">años entrenando</p></div>
+          <div class="stat"><p class="stat-value">+600</p><p class="stat-label">socios activos</p></div>
+          <div class="stat"><p class="stat-value">+30</p><p class="stat-label">máquinas y estaciones</p></div>
+          <div class="stat"><p class="stat-value">5</p><p class="stat-label">entrenadores</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="disciplinas" class="section section--photo" aria-labelledby="disciplinas-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Qué ofrecemos</p>
+          <h2 id="disciplinas-title" class="section-title" data-kinetic>Disciplinas</h2>
+          <p class="section-lead">Todo lo que necesitás para ganar fuerza y masa muscular.</p>
+        </div>
+        <div class="carousel reveal" data-carousel role="region" aria-roledescription="carrusel" aria-label="Disciplinas del gimnasio">
+          <div class="carousel-track" data-render="disciplinas" tabindex="0" aria-label="Lista de disciplinas">
+            <noscript><p class="empty">Activá JavaScript para ver las disciplinas.</p></noscript>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="horarios" class="section section--alt" aria-labelledby="horarios-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Cuándo entrenamos</p>
+          <h2 id="horarios-title" class="section-title" data-kinetic>Horarios</h2>
+          <p class="section-lead">Elegí el turno que mejor se adapte a tu día.</p>
+        </div>
+        <div data-render="horarios">
+          <noscript><p class="empty">Activá JavaScript para ver los horarios.</p></noscript>
+        </div>
+      </div>
+    </section>
+
+    <section id="planes" class="section" aria-labelledby="planes-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Sumate</p>
+          <h2 id="planes-title" class="section-title" data-kinetic>Planes y precios</h2>
+          <p class="section-lead">Precios de ejemplo. Consultá por promociones vigentes.</p>
+        </div>
+        <div class="grid grid--plans" data-render="planes">
+          <noscript><p class="empty">Activá JavaScript para ver los planes.</p></noscript>
+        </div>
+      </div>
+    </section>
+
+    <section id="entrenadores" class="section section--alt" aria-labelledby="entrenadores-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Tu equipo</p>
+          <h2 id="entrenadores-title" class="section-title" data-kinetic>Entrenadores</h2>
+        </div>
+        <div class="grid grid--coaches" data-render="entrenadores">
+          <noscript><p class="empty">Activá JavaScript para ver a los entrenadores.</p></noscript>
+        </div>
+      </div>
+    </section>
+
+    <section id="ubicacion" class="section" aria-labelledby="ubicacion-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Dónde estamos</p>
+          <h2 id="ubicacion-title" class="section-title" data-kinetic>Ubicación</h2>
+        </div>
+        <div class="location-grid">
+          <dl class="info-list reveal">
+            <div>
+              <dt><svg class="icon icon--sm" aria-hidden="true"><use href="#i-pin"></use></svg>Dirección</dt>
+              <dd>Av. Ejemplo 1234, Ciudad</dd>
+            </div>
+            <div>
+              <dt><svg class="icon icon--sm" aria-hidden="true"><use href="#i-clock"></use></svg>Atención</dt>
+              <dd>Lunes a viernes de 7 a 12 h y de 16 a 22 h</dd>
+            </div>
+          </dl>
+          <div class="map reveal">
+            <iframe title="Mapa con la ubicación de Panther Club de Entrenamiento"
+                    src="https://www.google.com/maps?q=Obelisco%2C%20Buenos%20Aires&amp;output=embed"
+                    width="600" height="450" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contacto" class="section section--alt" aria-labelledby="contacto-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Hablemos</p>
+          <h2 id="contacto-title" class="section-title" data-kinetic>Contacto y redes</h2>
+          <p class="section-lead">Escribinos o pasá por el club. Te contamos todo.</p>
+        </div>
+        <dl class="info-list reveal">
+          <div>
+            <dt><svg class="icon icon--sm" aria-hidden="true"><use href="#i-phone"></use></svg>Teléfono</dt>
+            <dd><a href="tel:+5400000000000">+54 0 000 000-0000</a></dd>
+          </div>
+          <div>
+            <dt><svg class="icon icon--sm" aria-hidden="true"><use href="#i-mail"></use></svg>Email</dt>
+            <dd><a href="mailto:info@panthersclub.example">info@panthersclub.example</a></dd>
+          </div>
+        </dl>
+        <ul class="social reveal">
+          <li><a class="btn btn--ghost" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-instagram"></use></svg>Instagram</a></li>
+          <li><a class="btn btn--ghost" href="#contacto" data-whatsapp target="_blank" rel="noopener noreferrer"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-whatsapp"></use></svg>WhatsApp</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© Panther Club de Entrenamiento</p>
+      <a href="#inicio">Volver arriba</a>
+    </div>
+  </footer>
+
+  <a class="wa-fab" href="#contacto" data-whatsapp target="_blank" rel="noopener noreferrer" aria-label="Escribinos por WhatsApp">
+    <svg class="icon" aria-hidden="true"><use href="#i-whatsapp"></use></svg>
+  </a>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

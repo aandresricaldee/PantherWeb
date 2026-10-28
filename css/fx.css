@@ -1,0 +1,290 @@
+/* ============================================================================
+   Efectos cinematográficos. Se cargan después de sections.css.
+   Para quitar un efecto: borrar su bloque acá y su línea en js/fx/index.js.
+   Todos los colores salen de css/tokens.css.
+   ========================================================================== */
+
+/* ---------- Intro (escudo + cortinas) ---------- */
+/* Solo se ve si el script del <head> puso .intro-pending en <html>. Corre en CSS desde el primer pintado. */
+.intro { display: none; }
+.intro-pending .intro {
+  display: block; position: fixed; inset: 0; z-index: 200; touch-action: none;
+  animation: intro-hide 0s linear 1.75s forwards; /* red de seguridad: se oculta sola aunque el JS falle */
+}
+@keyframes intro-hide { to { visibility: hidden; } }
+.intro.is-skipping { opacity: 0; transition: opacity 250ms ease; }
+
+.intro-curtain { position: absolute; left: 0; right: 0; height: 50.5%; background: var(--color-bg); }
+.intro-curtain--top { top: 0; animation: intro-curtain-up 700ms var(--ease-apple) 850ms forwards; }
+.intro-curtain--bottom { bottom: 0; animation: intro-curtain-down 700ms var(--ease-apple) 850ms forwards; }
+@keyframes intro-curtain-up { to { transform: translate3d(0, -101%, 0); } }
+@keyframes intro-curtain-down { to { transform: translate3d(0, 101%, 0); } }
+
+.intro-stage {
+  position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: var(--space-4);
+  animation: intro-stage-out 200ms ease 800ms forwards;
+}
+@keyframes intro-stage-out { to { opacity: 0; transform: scale(1.05); } }
+.intro-shield-wrap {
+  position: relative; overflow: hidden; width: min(46vw, 200px); aspect-ratio: 1;
+  animation: intro-in 600ms var(--ease-apple) both;
+}
+@keyframes intro-in { from { opacity: 0; transform: scale(0.88); } to { opacity: 1; transform: none; } }
+.intro-shield { width: 100%; height: 100%; }
+/* Destello de luz que cruza el escudo */
+.intro-sweep {
+  position: absolute; top: -10%; bottom: -10%; left: -60%; width: 50%;
+  background: linear-gradient(100deg, transparent, var(--color-glass-highlight), transparent);
+  transform: skewX(-18deg);
+  animation: intro-sweep 600ms ease-in-out 300ms both;
+}
+@keyframes intro-sweep { to { transform: translate3d(420%, 0, 0) skewX(-18deg); } }
+.intro-name {
+  font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.5em; color: var(--color-fg-muted); padding-left: 0.5em;
+  animation: intro-name 700ms var(--ease-apple) 200ms both;
+}
+@keyframes intro-name { from { opacity: 0; letter-spacing: 0.9em; } to { opacity: 1; letter-spacing: 0.5em; } }
+
+/* ---------- Hero: arranca cuando <html> tiene .is-ready (después de la intro) ---------- */
+.js:not(.is-ready) .hero-copy > :not(.hero-title),
+.js:not(.is-ready) .hero-bg-img { animation-play-state: paused; }
+.hero-copy > .hero-title { animation: none; } /* el título entra palabra por palabra */
+
+/* Capas decorativas del hero */
+.hero-fx { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+/* Viñeta: oscurece los bordes, como en el cine */
+.hero-fx::after {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(120% 90% at 50% 40%, transparent 55%, var(--color-scrim-strong) 100%);
+}
+/* Haces de luz que se mecen despacio (sin filter:blur: era lo más caro de pintar) */
+.hero-beams::before, .hero-beams::after {
+  content: ""; position: absolute; top: -20%; bottom: -20%;
+  background: linear-gradient(to right, transparent, var(--color-beam) 35%, var(--color-beam) 65%, transparent);
+  transform: rotate(18deg); animation: beam 11s ease-in-out infinite alternate;
+}
+.hero-beams::before { left: 32%; width: 18%; }
+.hero-beams::after { left: 58%; width: 10%; animation-duration: 15s; animation-delay: -4s; }
+@keyframes beam {
+  from { transform: translate3d(-6%, 0, 0) rotate(18deg); opacity: 0.35; }
+  to { transform: translate3d(8%, 0, 0) rotate(18deg); opacity: 0.85; }
+}
+.hero-particles { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* Foco de luz que sigue al mouse (js/fx/spotlight.js define --sx y --sy) */
+.hero-spot { position: absolute; inset: 0; background: radial-gradient(circle 38vmax at var(--sx, 64%) var(--sy, 42%), var(--color-spot), transparent 65%); }
+/* Grano de película (sin mix-blend-mode: forzaba a recomponer todo el hero en cada cuadro) */
+.hero-grain {
+  position: absolute; inset: -12%; opacity: 0.06; will-change: transform;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 1s steps(6) infinite;
+}
+@keyframes grain {
+  0% { transform: translate3d(0, 0, 0); } 20% { transform: translate3d(-3%, 2%, 0); } 40% { transform: translate3d(2%, -4%, 0); }
+  60% { transform: translate3d(-4%, -2%, 0); } 80% { transform: translate3d(4%, 3%, 0); } 100% { transform: translate3d(0, 0, 0); }
+}
+
+/* ---------- Texto cinético: cada palabra sube desde una máscara ---------- */
+.fx-text .kw { display: inline-block; overflow: hidden; vertical-align: top; padding-block: 0.16em; margin-block: -0.16em; }
+.fx-text .kw-in {
+  display: inline-block; transform: translate3d(0, 115%, 0);
+  transition: transform 900ms var(--ease-apple) calc(var(--i, 0) * 70ms);
+}
+.fx-text .is-in .kw-in { transform: none; }
+/* "pantera" con un brillo que la recorre */
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  .hero-title em .kw-in {
+    background: linear-gradient(100deg, var(--color-primary) 38%, var(--color-fg) 50%, var(--color-primary) 62%) 0 0 / 260% 100%;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: shimmer 5s linear 1.8s infinite;
+  }
+}
+@keyframes shimmer { from { background-position: 130% 0; } to { background-position: -130% 0; } }
+
+/* ---------- Cinta de texto gigante ---------- */
+.marquee { position: relative; overflow: hidden; padding-block: var(--space-5); background: var(--color-surface); border-block: 1px solid var(--color-border); }
+.marquee-track { display: flex; width: max-content; }
+.marquee.is-running .marquee-track { animation: marquee 38s linear infinite; }
+@keyframes marquee { to { transform: translate3d(-50%, 0, 0); } }
+.marquee-set { display: flex; flex: none; align-items: center; gap: var(--space-6); padding-right: var(--space-6); }
+.marquee span {
+  display: inline-block; white-space: nowrap; font-family: var(--font-display); font-weight: 700; line-height: 1;
+  font-size: clamp(3rem, 8vw, 6.5rem); text-transform: uppercase; letter-spacing: 0.02em;
+  color: transparent; -webkit-text-stroke: 1.5px var(--color-fg-muted);
+  transform: skewX(var(--skew, 0deg)); /* js/fx/marquee.js: se inclina según la velocidad del scroll */
+}
+.marquee .is-solid { color: var(--color-fg); -webkit-text-stroke: 0; }
+.marquee .is-accent { color: var(--color-primary); -webkit-text-stroke: 0; }
+.marquee i { flex: none; width: 0.5rem; height: 0.5rem; background: var(--color-primary); transform: rotate(45deg); }
+
+/* ---------- Números editoriales detrás de los títulos (01, 02…) ---------- */
+main { counter-reset: sec; }
+.section-head, .about-text { position: relative; counter-increment: sec; }
+.section-head::before, .about-text::before {
+  content: counter(sec, decimal-leading-zero);
+  position: absolute; left: -0.04em; top: -0.34em; z-index: -1; pointer-events: none; user-select: none;
+  font-family: var(--font-display); font-weight: 700; line-height: 1; font-size: clamp(6rem, 17vw, 11rem);
+  color: transparent; -webkit-text-stroke: 1px var(--color-border);
+  transform: translate3d(0, var(--py, 0px), 0); /* js/fx/layers.js: parallax */
+}
+
+/* ---------- Barra de progreso de lectura ---------- */
+.scroll-progress { position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; pointer-events: none; }
+.scroll-progress::before {
+  content: ""; display: block; height: 100%; background: var(--color-primary);
+  transform-origin: left center; transform: scaleX(var(--progress, 0)); box-shadow: 0 0 12px var(--color-primary-soft);
+}
+
+/* ---------- Cifras ---------- */
+.stat-value { font-variant-numeric: tabular-nums; }
+
+/* ---------- Inclinación 3D con reflejo (planes y entrenadores) ---------- */
+[data-tilt] {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 500ms var(--ease-out), border-color var(--dur-base) var(--ease-out);
+}
+[data-tilt]::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity var(--dur-base);
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%), var(--color-glass-highlight), transparent 55%);
+}
+@media (hover: hover) and (pointer: fine) {
+  [data-tilt]:hover {
+    will-change: transform; /* solo mientras se interactúa: tenerlo siempre ocupa memoria de GPU en cada tarjeta */
+    transform: perspective(900px) translateY(-4px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transition: transform 120ms linear, border-color var(--dur-base) var(--ease-out);
+  }
+  [data-tilt]:hover::after { opacity: 1; }
+}
+
+/* Plan destacado: borde de luz giratorio */
+@property --ring { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+.plan--featured::before {
+  content: ""; position: absolute; inset: 0; padding: 2px; pointer-events: none;
+  background: conic-gradient(from var(--ring), transparent 0 55%, var(--color-primary) 78%, var(--color-primary-hover) 90%, transparent 100%);
+  -webkit-mask: linear-gradient(var(--color-bg) 0 0) content-box, linear-gradient(var(--color-bg) 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: ring-spin 4s linear infinite;
+}
+@keyframes ring-spin { to { --ring: 360deg; } }
+
+/* ---------- Botones magnéticos (js/fx/magnetic.js define --mx y --my) ---------- */
+.magnetic { translate: var(--mx, 0px) var(--my, 0px); }
+.btn.magnetic {
+  transition: background var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast), transform var(--dur-fast), translate 250ms var(--ease-out);
+}
+.wa-fab.magnetic { transition: transform var(--dur-base) var(--ease-apple), translate 250ms var(--ease-out); }
+
+/* ---------- Entrenadores: tratamiento de cartel de película ---------- */
+.grid--coaches { counter-reset: coach; }
+.coach { counter-increment: coach; }
+.coach-photo.coach-initials {
+  position: relative; overflow: hidden; color: transparent; -webkit-text-stroke: 2px var(--color-primary);
+  font-size: clamp(4.5rem, 9vw, 6.5rem);
+  background:
+    radial-gradient(120% 80% at 80% 0%, var(--color-primary-soft), transparent 60%),
+    linear-gradient(180deg, var(--color-surface), var(--color-card));
+}
+.coach-initials::before {
+  content: counter(coach, decimal-leading-zero); position: absolute; top: var(--space-3); left: var(--space-4);
+  font-size: 1rem; font-weight: 600; letter-spacing: 0.2em; color: var(--color-fg-muted); -webkit-text-stroke: 0;
+}
+.coach-initials::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px;
+  background: linear-gradient(90deg, var(--color-primary), transparent);
+}
+
+/* ---------- Esquinas HUD en las tarjetas (disciplinas, días y planes) ---------- */
+/* Tres esquinas (la cuarta la recorta el corte diagonal de la tarjeta). Se expanden hacia su lugar al pasar el mouse. */
+.hud {
+  position: absolute; inset: 8px; pointer-events: none; opacity: 0; transform: scale(1.04);
+  transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out);
+  background:
+    linear-gradient(var(--color-primary), var(--color-primary)) top left / 14px 2px no-repeat,
+    linear-gradient(var(--color-primary), var(--color-primary)) top left / 2px 14px no-repeat,
+    linear-gradient(var(--color-primary), var(--color-primary)) top right / 14px 2px no-repeat,
+    linear-gradient(var(--color-primary), var(--color-primary)) top right / 2px 14px no-repeat,
+    linear-gradient(var(--color-primary), var(--color-primary)) bottom left / 14px 2px no-repeat,
+    linear-gradient(var(--color-primary), var(--color-primary)) bottom left / 2px 14px no-repeat;
+}
+@media (hover: hover) and (pointer: fine) {
+  .card:hover > .hud { opacity: 1; transform: none; }
+}
+
+/* ---------- Carrusel: las tarjetas ganan presencia al pasar por el centro (sin JS, solo opacity y transform) ---------- */
+@supports (animation-timeline: view()) {
+  .carousel .discipline { animation: slide-depth linear both; animation-timeline: view(inline); }
+}
+@keyframes slide-depth {
+  0% { opacity: 0.4; transform: scale(0.94); }
+  50% { opacity: 1; transform: none; }
+  100% { opacity: 0.4; transform: scale(0.94); }
+}
+
+/* ---------- Estado en vivo: "Abierto ahora" ---------- */
+.hero-copy > :nth-child(5) { animation-delay: 480ms; }
+.status {
+  display: inline-flex; align-items: center; gap: var(--space-2); min-height: 1.5em; margin-top: var(--space-5);
+  font-family: var(--font-display); font-size: 1rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--color-fg-muted);
+}
+.status:not([data-state]) { visibility: hidden; } /* se muestra cuando el JS calcula el estado: sin salto de layout */
+.status-dot { position: relative; flex: none; width: 0.6rem; height: 0.6rem; border-radius: 50%; background: var(--color-fg-muted); }
+.status[data-state="open"] { color: var(--color-fg); }
+.status[data-state="open"] .status-dot { background: var(--color-primary); }
+/* Anillo que se expande y se desvanece: transform y opacity */
+.status[data-state="open"] .status-dot::after {
+  content: ""; position: absolute; inset: -2px; border-radius: 50%; border: 2px solid var(--color-primary);
+  animation: status-pulse 1.8s var(--ease-out) infinite;
+}
+@keyframes status-pulse { from { opacity: 0.7; transform: scale(0.6); } to { opacity: 0; transform: scale(2.6); } }
+/* Tarjeta del día de hoy en Horarios */
+.day.is-today { border-color: var(--color-primary); }
+.day.is-today .day-name::after {
+  content: "Hoy"; margin-left: var(--space-2); padding: 0.1em 0.5em; vertical-align: middle;
+  background: var(--color-primary); color: var(--color-on-primary); font-size: 0.9rem; letter-spacing: 0.1em;
+}
+
+/* ---------- Línea de latido (ECG) bajo la cinta de texto ---------- */
+.ecg { position: relative; overflow: hidden; height: 48px; margin-top: var(--space-4); }
+.ecg::before, .ecg::after { content: ""; position: absolute; top: 0; bottom: 0; width: 15%; z-index: 1; pointer-events: none; }
+.ecg::before { left: 0; background: linear-gradient(to right, var(--color-surface), transparent); }
+.ecg::after { right: 0; background: linear-gradient(to left, var(--color-surface), transparent); }
+/* El dibujo es una máscara (solo importa su transparencia; el color lo pone el token): un período de 240 px que se repite y se desplaza */
+.ecg-line {
+  position: absolute; top: 0; bottom: 0; left: 0; width: calc(100% + 240px); background: var(--color-primary);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='48' viewBox='0 0 240 48'%3E%3Cpath d='M0 24H70L80 24L88 18L96 24H110L118 30L126 4L136 44L144 24H160L170 20L180 24H240' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") 0 50% / 240px 48px repeat-x;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='48' viewBox='0 0 240 48'%3E%3Cpath d='M0 24H70L80 24L88 18L96 24H110L118 30L126 4L136 44L144 24H160L170 20L180 24H240' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") 0 50% / 240px 48px repeat-x;
+  animation: ecg-run 5s linear infinite;
+}
+@keyframes ecg-run { to { transform: translate3d(-240px, 0, 0); } }
+
+/* ---------- Cifras: línea de escaneo cuando termina de contar ---------- */
+.stat { position: relative; overflow: hidden; }
+.stat.is-scan::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--color-primary), transparent) top / 100% 2px no-repeat;
+  animation: stat-scan 700ms linear both;
+}
+@keyframes stat-scan { from { transform: translateY(-100%); opacity: 0.9; } to { transform: translateY(100%); opacity: 0; } }
+
+/* ---------- Barra de progreso: con soporte, la maneja el CSS (fuera del hilo principal) ---------- */
+@supports (animation-timeline: scroll()) {
+  .scroll-progress::before { animation: progress-grow linear both; animation-timeline: scroll(root block); }
+}
+@keyframes progress-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* ---------- Dispositivos sin mouse: sin grano animado (ahorra batería) ---------- */
+@media (hover: none) { .hero-grain { animation: none; } }
+
+/* ---------- Reducir movimiento: todo queda quieto y visible ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .intro { display: none !important; }
+  .fx-text .kw-in { transform: none !important; transition: none !important; }
+  .hero-title em .kw-in { animation: none; }
+  .hero-beams::before, .hero-beams::after, .hero-grain, .plan--featured::before { animation: none; }
+  .marquee-track { animation: none !important; }
+  [data-tilt], [data-tilt]:hover { transform: none; }
+  .carousel .discipline { animation: none; }
+  .status[data-state="open"] .status-dot::after, .stat.is-scan::after { animation: none; }
+  .ecg-line { animation: none; }
+}
